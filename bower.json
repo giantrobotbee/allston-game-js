@@ -1,0 +1,25 @@
+{
+  "name": "allston_game",
+  "version": "0.0.1",
+  "authors": [
+    "Dan Barron <stereoalliance@gmail.com>"
+  ],
+  "description": "A game about drinking",
+  "main": "main.js",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "assets/libs/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "eventEmitter": "~4.2.7",
+    "jquery": "~2.1.0",
+    "lodash": "~2.4.1",
+    "normalize-css": "~3.0.0",
+    "pixi": "~1.5.1"
+  }
+}

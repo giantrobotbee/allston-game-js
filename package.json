@@ -1,0 +1,32 @@
+{
+  "name": "allston_game",
+  "description": "A game where you go to bars and drink beer",
+  "version": "1.2.3",
+  "devDependencies": {
+    "gulp": "^3.5.5",
+    "gulp-browserify": "^0.5.0",
+    "bower": "^1.2.8",
+    "gulp-concat": "^2.1.7",
+    "browserify": "^3.32.1",
+    "browserify-shim": "^3.3.1",
+    "vinyl-source-stream": "^0.1.1",
+    "gulp-streamify": "0.0.4",
+    "minifyify": "^2.3.0",
+    "Concur": "^0.2.5",
+    "lodash": "^2.4.1"
+  },
+  "browserify": {
+    "transform": [
+      "browserify-shim"
+    ]
+  },
+  "browser": {
+    "jquery": "./assets/libs/bower_components/jquery/dist/jquery.js",
+    "pixi": "./assets/libs/bower_components/pixi/bin/pixi.js",
+    "ee": "./assets/libs/bower_components/eventEmitter/EventEmitter.js"
+  },
+  "browserify-shim": {
+    "jquery": "$",
+    "pixi": "PIXI"
+  }
+}
