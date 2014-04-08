@@ -14,5 +14,5 @@ gulp.task('browserify', function() {
 });
 
 gulp.task('default', ['browserify'], function() {
-  gulp.watch('assets/js/*', ['browserify']);
+  gulp.watch('assets/js/**/*.js', ['browserify']);
 });

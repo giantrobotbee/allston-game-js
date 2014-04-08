@@ -1,8 +1,8 @@
-var Concur = require('Concur');
+var Evented = require('./evented.js');
 var _ = require('lodash');
 
 // TODO: Extend EventEmitter
-module.exports = Concur.extend({
+module.exports = Evented.extend({
   constructor: function() {
     this.devices = [];
     this.lastActives = [];
@@ -28,11 +28,11 @@ module.exports = Concur.extend({
     var justReleased;
     var currentlyPressed;
 
-    justReleased = this.getRecentlyReleased();
-    currentlyPressed = this.getCurrentlyPressed();
+    //justReleased = this.getRecentlyReleased();
+    //currentlyPressed = this.getCurrentlyPressed();
 
-    // Trigger all the appropriate events
-    this.triggerPressed(currentlyPressed);
-    this.triggerReleased(justReleased);
+    //// Trigger all the appropriate events
+    //this.triggerPressed(currentlyPressed);
+    //this.triggerReleased(justReleased);
   }
 });
