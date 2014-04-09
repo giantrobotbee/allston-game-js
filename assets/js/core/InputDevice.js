@@ -5,5 +5,8 @@ module.exports = Concur.extend({
   },
 
   pollInput: function() {
+  },
+
+  emitEvents: function(emitter) {
   }
 });
