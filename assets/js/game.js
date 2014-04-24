@@ -2,6 +2,7 @@ var PIXI = require('pixi');
 var Player = require('./player.js');
 var Level = require('./level.js');
 var Scene = require('./scene.js');
+var InputEvent = require('./InputEvent.js');
 var SceneManager = require('./sceneManager.js');
 var InputManager = require('./core/inputManager.js');
 var GamepadDevice = require('./core/gamepadDevice.js');
@@ -58,10 +59,14 @@ Game.prototype.run = function() {
 Game.prototype.setupInputManager = function() {
   this.inputManager = new InputManager();
   this.inputManager.addInputDevice(new GamepadDevice());
-  //this.inputManager.addInputDevice(new KeyboardDevice());
+  this.inputManager.addInputDevice(new KeyboardDevice());
 
-  this.inputManager.on('up', function() {
-    console.log('up was pressed');
+  this.inputManager.on(InputEvent.UP_PRESSED, function() {
+    //console.log('up was pressed');
+  });
+
+  this.inputManager.on(InputEvent.UP_RELEASED, function() {
+    //console.log('up was released');
   });
 };
 

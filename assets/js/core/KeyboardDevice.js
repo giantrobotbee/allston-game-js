@@ -1,52 +1,86 @@
-var InputDevice = require('./InputDevice');
+var _ = require('lodash');
+var InputDevice = require('./InputDevice.js');
+var InputEvent = require('../InputEvent.js');
 
 var KeyboardDevice = InputDevice.extend({
   constructor: function() {
     document.addEventListener('keydown', this.keyPressed.bind(this));
     document.addEventListener('keyup', this.keyReleased.bind(this));
-  },
 
-  pollInput: function() {
+    this.pressed = {};
+    this.released = {};
   },
 
   emitEvents: function(emitter) {
-    emitter.emit(event.type, event);
+    _.each(this.pressed, function(event, key, coll) {
+        emitter.emit(event.type, event);
+    }, this);
+
+    _.each(this.released, function(event, key, coll) {
+      emitter.emit(event.type, event);
+    }, this);
+
+    this.released = {};
   },
 
-  keyPressed: function(event) {
-    // If this is a key that we care about
-    // Create a new event and append it to the list
+  keyPressed: function(keyEvent) {
+   _.each(KeyboardDevice.INPUT_MAP, function(keyData, keyName) {
+      var keyCode = keyData.keyCode;
+      var ev, foo;
+
+      if (keyEvent.keyCode == keyCode && !_.has(this.pressed, keyName)) {
+        ev = new InputEvent(keyData.pressedEvent);
+        this.pressed[keyName] = ev;
+      }
+    }, this);
   },
 
-  keyReleased: function(event) {
+  keyReleased: function(keyEvent) {
+   _.each(KeyboardDevice.INPUT_MAP, function(keyData, keyName) {
+      var keyCode = keyData.keyCode;
+      var ev, foo;
+
+      if (keyEvent.keyCode == keyCode) {
+        ev = new InputEvent(keyData.releasedEvent);
+        this.released[keyName] = ev;
+        delete this.pressed[keyName];
+      }
+    }, this);
   }
 });
 
+// TODO: Use constants defined on InputEvent
+// for eventType
 KeyboardDevice.INPUT_MAP = {
-  {
+  arrowUp: {
     keyCode: 38,
-    eventType: 'up'
+    pressedEvent: InputEvent.UP_PRESSED,
+    releasedEvent: InputEvent.UP_RELEASED
   },
 
-  {
+  arrowDown: {
     keyCode: 40,
-    eventType: 'down'
+    pressedEvent: InputEvent.DOWN_PRESSED,
+    releasedEvent: InputEvent.DOWN_RELEASED
   },
 
-  {
+  arrowLeft: {
     keyCode: 37,
-    eventType: 'left'
+    pressedEvent: InputEvent.LEFT_PRESSED,
+    releasedEvent: InputEvent.LEFT_RELEASED
   },
 
-  {
+  arrowRight: {
     keyCode: 39,
-    eventType: 'right'
+    pressedEvent: InputEvent.RIGHT_PRESSED,
+    releasedEvent: InputEvent.RIGHT_RELEASED
   },
 
-  {
+  spacebar: {
     keyCode: 32,
-    eventType: 'action'
-  },
+    pressedEvent: InputEvent.ACTION_PRESSED,
+    releasedEvent: InputEvent.ACTION_RELEASED
+  }
 }
 
 module.exports = KeyboardDevice;
