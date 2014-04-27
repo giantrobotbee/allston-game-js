@@ -7,20 +7,14 @@ var KeyboardDevice = InputDevice.extend({
     document.addEventListener('keydown', this.keyPressed.bind(this));
     document.addEventListener('keyup', this.keyReleased.bind(this));
 
-    this.pressed = {};
-    this.released = {};
+    this.events = [];
   },
 
-  emitEvents: function(emitter) {
-    _.each(this.pressed, function(event, key, coll) {
-        emitter.emit(event.type, event);
-    }, this);
+  pollInput: function() {
+    var events = this.events;
+    this.events = [];
 
-    _.each(this.released, function(event, key, coll) {
-      emitter.emit(event.type, event);
-    }, this);
-
-    this.released = {};
+    return events;
   },
 
   keyPressed: function(keyEvent) {
@@ -28,9 +22,9 @@ var KeyboardDevice = InputDevice.extend({
       var keyCode = keyData.keyCode;
       var ev, foo;
 
-      if (keyEvent.keyCode == keyCode && !_.has(this.pressed, keyName)) {
+      if (keyEvent.keyCode == keyCode) {
         ev = new InputEvent(keyData.pressedEvent);
-        this.pressed[keyName] = ev;
+        this.events.push(ev);
       }
     }, this);
   },
@@ -42,8 +36,7 @@ var KeyboardDevice = InputDevice.extend({
 
       if (keyEvent.keyCode == keyCode) {
         ev = new InputEvent(keyData.releasedEvent);
-        this.released[keyName] = ev;
-        delete this.pressed[keyName];
+        this.events.push(ev);
       }
     }, this);
   }

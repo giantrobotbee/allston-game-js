@@ -1,10 +1,10 @@
 var Evented = require('./evented.js');
 var _ = require('lodash');
 
-// TODO: Extend EventEmitter
 module.exports = Evented.extend({
   constructor: function() {
     this.devices = [];
+    this.inputStates = [];
   },
 
   addInputDevice: function(device) {
@@ -13,10 +13,23 @@ module.exports = Evented.extend({
 
   update: function() {
     _.each(this.devices, this.updateDevice, this);
+    this.emitEvents();
   },
 
   updateDevice: function(device) {
-    device.pollInput();
-    device.emitEvents(this);
+    var state;
+
+    state = device.pollInput();
+    this.inputStates.push(state);
+  },
+
+  emitEvents: function() {
+    var events = _.uniq(_.flatten(this.inputStates));
+
+    _.each(events, function(evt) {
+      this.emit(evt.type, evt);
+    }, this);
+
+    this.inputStates = [];
   }
 });

@@ -2,14 +2,22 @@ var _ = require('lodash');
 var Base = require('./core/baseObject.js');
 
 var SceneManager = Base.extend({
-  constructor: function() {
+  constructor: function(world) {
+    this.world = world;
     this.scenes = {};
     this.currentScene = null;
   },
 
-  addScene: function(scene) {
-    if (!this.scenes[scene.id]) {
-      this.scenes[scene.id] = scene;
+  addScene: function(id, scene) {
+    if (!this.scenes[id]) {
+      scene.setWorld(this.world);
+      this.scenes[id] = scene;
+    }
+  },
+
+  removeScene: function(scene) {
+    if (this.scenes[scene.id]) {
+      delete this.scenes[scene.id];
     }
   },
 
@@ -37,8 +45,5 @@ var SceneManager = Base.extend({
     this.currentScene.update();
   }
 });
-
-SceneManager.SCENE_ONE = "sceneOne";
-SceneManager.SCENE_TWO = "sceneTwo";
 
 module.exports = SceneManager;

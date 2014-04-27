@@ -2,6 +2,7 @@ var PIXI = require('pixi');
 var Player = require('./player.js');
 var Level = require('./level.js');
 var Scene = require('./scene.js');
+var SceneOne = require('./SceneOne.js');
 var InputEvent = require('./InputEvent.js');
 var SceneManager = require('./sceneManager.js');
 var InputManager = require('./core/inputManager.js');
@@ -18,8 +19,10 @@ function Game(width, height) {
 
   this.createStage();
   this.fetchRenderer();
-  this.setupInputManager();
-  this.setupSceneManager();
+  this.inputManager = this.setupInputManager();
+  this.sceneManager = this.setupSceneManager();
+
+  this.sceneManager.addScene('one', new SceneOne());
 }
 
 Game.prototype.update = function() {
@@ -43,38 +46,23 @@ Game.prototype.run = function() {
   var gameContainer = document.querySelector('#gameContainer');
   gameContainer.appendChild(this.renderer.view);
 
-  document.addEventListener('keydown', (function(event) {
-    if (event.keyCode === 49) {
-      this.sceneManager.changeScene(SceneManager.SCENE_ONE);
-    } else if (event.keyCode === 50) {
-      this.sceneManager.changeScene(SceneManager.SCENE_TWO);
-    }
-  }).bind(this));
-
-  this.sceneManager.changeScene(SceneManager.SCENE_ONE);
+  this.sceneManager.changeScene('one');
 
   this.update();
 };
 
 Game.prototype.setupInputManager = function() {
-  this.inputManager = new InputManager();
-  this.inputManager.addInputDevice(new GamepadDevice());
-  this.inputManager.addInputDevice(new KeyboardDevice());
+  var im = new InputManager();
+  //im.addInputDevice(new GamepadDevice());
+  im.addInputDevice(new KeyboardDevice());
 
-  this.inputManager.on(InputEvent.UP_PRESSED, function() {
-    //console.log('up was pressed');
-  });
-
-  this.inputManager.on(InputEvent.UP_RELEASED, function() {
-    //console.log('up was released');
-  });
+  return im;
 };
 
 Game.prototype.setupSceneManager = function() {
-  this.sceneManager = new SceneManager();
+  var sm = new SceneManager(this);
 
-  this.sceneManager.addScene(new Scene(SceneManager.SCENE_ONE));
-  this.sceneManager.addScene(new Scene(SceneManager.SCENE_TWO));
+  return sm;
 }
 
 module.exports = Game;
