@@ -61,13 +61,17 @@ var SceneOne = Scene.extend({
   update: function() {
     if (this.movingRight) {
       this.player.position.x = this.player.position.x + 6;
-    } else if (this.movingLeft) {
+    }
+
+    if (this.movingLeft) {
       this.player.position.x = this.player.position.x - 6;
     }
 
     if (this.movingUp) {
       this.player.position.y = this.player.position.y - 6;
-    } else if (this.movingDown) {
+    }
+
+    if (this.movingDown) {
       this.player.position.y = this.player.position.y + 6;
     }
 
