@@ -17,8 +17,8 @@ function Game(width, height) {
   this.width = width;
   this.height = height;
 
-  this.createStage();
-  this.fetchRenderer();
+  this.stage = this.createStage();
+  this.renderer = this.fetchRenderer();
   this.inputManager = this.setupInputManager();
   this.sceneManager = this.setupSceneManager();
 
@@ -35,11 +35,11 @@ Game.prototype.update = function() {
 };
 
 Game.prototype.createStage = function() {
-  this.stage = new PIXI.Stage(0x66FF99);
+  return new PIXI.Stage(0x66FF99);
 };
 
 Game.prototype.fetchRenderer = function() {
-  this.renderer = PIXI.autoDetectRenderer(this.width, this.height);
+  return PIXI.autoDetectRenderer(this.width, this.height);
 };
 
 Game.prototype.run = function() {

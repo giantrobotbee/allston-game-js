@@ -6,11 +6,11 @@ var Scene = Base.extend({
 
   constructor: function(sceneId) {
     this.id = sceneId;
-    this.initialize();
   },
 
   setWorld: function(world) {
     this.world = world
+    this.initialize();
     this.bindEvents();
   },
 
@@ -20,22 +20,30 @@ var Scene = Base.extend({
   },
 
   bindEvents: function() {
+    this.unbindEvents();
     _.each(this.events, function(callback, type) {
-      this.world.inputManager.on(type, this[callback]);
+      this.world.inputManager.on(type, this[callback].bind(this));
     }, this);
+  },
+
+  unbindEvents: function() {
+    this.world.inputManager.removeAllListeners();
   },
 
   update: function() {
   },
 
   play: function() {
+    this.bindEvents();
   },
 
   pause: function() {
+    this.unbindEvents();
   },
 
   // Conceptual destructor
   stop: function() {
+    this.unbindEvents();
   }
 });
 
